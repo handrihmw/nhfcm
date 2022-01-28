@@ -31,7 +31,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n    \"to\" : \"/topics/all\",\n    \"priority\": \"high\",\n    \"notification\": {\n        \"title\": \"Title\",\n        \"body\" : \"First Notification\",\n        \"text\": \"Text\"\n    }\n}",
+					"raw": "{ \n    \"to\" : \"c4j0Z5_SO-4saVpKu7C5uM:APA91bFqhGDIlgzVY2ALgwLjUsJWGBkTSdE4o2_j0K9Mr8XZkvSovVJhU8ymLqfTIOGAn1bLD4L4sYcaiYH-HSewYJk7goDxvzn2UpLWecR5pKLedSid5NkKR-qyB8kO1QP9tu6NkHwL\",\n    \"priority\": \"high\",\n    \"notification\": {\n        \"title\": \"Title\",\n        \"body\" : \"First Notification\",\n        \"text\": \"Text\"\n    }\n}",
 					"options": {
 						"raw": {}
 					}

@@ -21,8 +21,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div id="firebase-popup" class="popup-subscribe my-5"></div>
-
-                    <p>Token saya: <span id="tokenarea"></span></p>
+                    <div id="token"></div>
+                    <div id="msg"></div>
+                    <div id="notis"></div>
+                    <div id="err"></div>
                 </div>
             </div>
         </div>
@@ -39,6 +41,12 @@
             });
         }
     </script>
+    <script>
+        MsgElem   = document.getElementById('msg');
+        TokenElem = document.getElementById('token');
+        NotisElem = document.getElementById('notis');
+        ErrElem   = document.getElementById('err');
+</script>
 </body>
 
 </html>
