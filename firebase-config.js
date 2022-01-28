@@ -2,19 +2,14 @@ var pushPopup = localStorage.getItem('popupStatus');
 var token = "";
 var firebasePopup = document.getElementById('firebase-popup');
 var permission = Notification.permission;
-var laravelToken;
-var urlSendToken;
 
-console.log('permission statusnya apa yaa: ', permission);
+console.log('status permission: ', permission);
 checkPopupStatus();
 
-var main = function () {
-	return {
-		setup: function (params) {
-			laravelToken = params.token;
-			urlSendToken = params.url;
-		}
-	}
+function allowButton() {
+	setStatus('allowed');
+	getToken();
+	document.getElementById("popup-subscribe").style.display = "none";
 }
 
 function cancelButton() {
@@ -71,7 +66,7 @@ function setStatus(status) {
 }
 
 function showPopup() {
-    firebasePopup.innerHTML = `<div id="popup-subscribe" class="card nh-push__card">
+	firebasePopup.innerHTML = `<div id="popup-subscribe" class="card nh-push__card">
 			<div class="card-body">
 				<div class="nh-push__card--wrapper ">
 					<img src="/logo.webp" class="nh-push__image" loading="lazy" />
@@ -95,7 +90,6 @@ function getToken() {
 	var config = {
 		apiKey: "AIzaSyCWXOCqEm07FK95TxsYtn4fez9aIjmyKxs",
 		authDomain: "niaga-c7572.firebaseapp.com",
-		databaseURL: "https://niaga-c7572-default-rtdb.asia-southeast1.firebasedatabase.app",
 		projectId: "niaga-c7572",
 		storageBucket: "niaga-c7572.appspot.com",
 		messagingSenderId: "312657100557",
@@ -107,50 +101,69 @@ function getToken() {
 
 	const messaging = firebase.messaging();
 
-	messaging.requestPermission().then(function () {
-			return messaging.getToken();
-		})
-		.then(function (token) {
-			console.log('token is ', token)
-			if (fbToken === null) {
-				sendToken(token);
-			} else {
-				if (fbToken !== token) {
-					sendToken(token)
-				}
-			}
-		})
-		.catch(function (err) {
-			document.getElementById("popup-subscribe").style.display = "none";
-			console.log("Unable to get permission to notify. ", err);
-		});
-}
+	messaging.requestPermission()
+	.then(function () {
+		console.log("Izin pemberitahuan diberikan.");
 
-function allowButton() {
-	setStatus('allowed');
-	getToken();
-	document.getElementById("popup-subscribe").style.display = "none";
-}
+		return messaging.getToken()
+	})
+	.then(function(token) {
+		$('#tokenarea').html(token);
+	})
+	.catch(function (err) {
+		console.log("Tidak dapat memperoleh izin pemberitahuan", err);
+	});
 
-function sendToken(token) {
-	var firebaseToken = token;
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
-	$.ajax(urlSendToken, {
-		data: {
-			token: laravelToken,
-			fbToken: firebaseToken
-		},
-		method: "POST",
-		success: function (data) {
-			console.log('data: ', data);
-			localStorage.setItem('fb-token', firebaseToken);
-		},
-		error: function (err) {
-			console.log('error send token', err);
-		}
-	});
+	// messaging.requestPermission()
+	// 	.then(function () {
+	// 		console.log('Notification permission granted.');
+
+	// 		messaging.getToken()
+	// 			.then(function (currentToken) {
+	// 				if (currentToken) {
+	// 					console.log(currentToken);
+	// 				} else {
+	// 					console.log('No Instance ID token available. Request permission to generate one.');
+	// 				}
+	// 			})
+	// 			.catch(function (err) {
+	// 				console.log('An error occurred while retrieving token. ', err);
+	// 			});
+	// 	})
+	// 	.catch(function (err) {
+	// 		console.log('Unable to get permission to notify. ', err);
+	// 	});
+
+	// messaging.getToken()
+	// 	.then(function (currentToken) {
+	// 		if (currentToken) {
+	// 			console.log(currentToken);
+	// 			$('#tokenarea').html(currentToken);
+	// 		} else {
+	// 			console.log('No Instance ID token available. Request permission to generate one.');
+	// 			updateUIForPushPermissionRequired();
+
+	// 		}
+	// 	})
+	// 	.catch(function (err) {
+	// 		console.log('An error occurred while retrieving token. ', err);
+	// 	});
+
+	// messaging.onTokenRefresh(function () {
+	// 	messaging.getToken()
+	// 		.then(function (refreshedToken) {
+	// 			console.log('Token refreshed.');
+
+	// 			$('#tokenarea').html(refreshedToken);
+
+	// 			console.log(refreshedToken);
+	// 		})
+	// 		.catch(function (err) {
+	// 			console.log('Unable to retrieve refreshed token ', err);
+	// 		});
+	// })
+
+	// messaging.onMessage(function (payload) {
+	// 	console.log("Message received. ", payload);
+	// });
 }
